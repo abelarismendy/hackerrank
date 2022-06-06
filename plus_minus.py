@@ -13,8 +13,23 @@ import sys
 #
 
 def plusMinus(arr):
-    pass
-    # Write your code here
+    total = len(arr)
+    pos = 0
+    neg = 0
+    zero = 0
+    for number in arr:
+        if number > 0:
+            pos += 1
+        elif number < 0:
+            neg += 1
+        elif number == 0:
+            zero += 1
+    pos = pos/total
+    neg = neg/total
+    zero = zero/total
+    print(f'{pos:.6f}')
+    print(f'{neg:.6f}')
+    print(f'{zero:.6f}')
 
 if __name__ == '__main__':
     n = int(input().strip())
