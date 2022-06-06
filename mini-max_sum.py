@@ -13,8 +13,14 @@ import sys
 #
 
 def miniMaxSum(arr):
-    # Write your code here
-    pass
+    max_v = max(arr)
+    min_v = min(arr)
+    total = sum(arr)
+
+    min_sum = total-max_v
+    max_sum = total-min_v
+
+    print(min_sum, max_sum)
 
 if __name__ == '__main__':
 
