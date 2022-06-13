@@ -18,8 +18,6 @@ def flippingBits(n):
         else:
             binario[i] = 1
 
-    # print(list(reversed(binario)))
-
     exp = 0
     suma = 0
     for bit in reversed(binario):
