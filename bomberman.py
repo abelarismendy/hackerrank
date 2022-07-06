@@ -19,13 +19,18 @@ def printMatrix(matrix):
     print()
 
 def bomberMan(n, grid):
+    rows = len(grid)
+    cols = len(grid[0])
+    if n % 2 == 0:
+        # fill the grid with bombs
+        grid = [['O' for i in range(cols)] for j in range(rows)]
+        grid = [''.join(row) for row in grid]
+        return grid
     for second in range(n):
         if second == 0:
-            counter_grid = [[-1 if grid[i][j] == "." else 2 for j in range(len(grid[0]))] for i in range(len(grid))]
-            grid = [["." if grid[i][j] == "." else "O" for j in range(len(grid[0]))] for i in range(len(grid))]
+            counter_grid = [[-1 if grid[i][j] == "." else 2 for j in range(cols)] for i in range(rows)]
+            grid = [["." if grid[i][j] == "." else "O" for j in range(cols)] for i in range(rows)]
         else:
-            rows = len(grid)
-            cols = len(grid[0])
             detonate = []
             for i in range(len(counter_grid)):
                 for j, b in enumerate(counter_grid[i]):
