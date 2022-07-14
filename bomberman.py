@@ -13,133 +13,49 @@ import sys
 #  2. STRING_ARRAY grid
 #
 
-def printMatrix(matrix):
-    for i in matrix:
-        print(i)
-    print()
-
-""" def bomberMan(n, grid):
-    rows = len(grid)
-    cols = len(grid[0])
-    if n % 2 == 0:
-        # fill the grid with bombs
-        grid = [['O' for i in range(cols)] for j in range(rows)]
-        grid = [''.join(row) for row in grid]
-        return grid
-    if n % 3 == 0:
-
-        for second in range(3):
-            if second == 0:
-                counter_grid = [[-1 if grid[i][j] == "." else 2 for j in range(cols)] for i in range(rows)]
-                grid = [["." if grid[i][j] == "." else "O" for j in range(cols)] for i in range(rows)]
-            else:
-                detonate = []
-                for i in range(len(counter_grid)):
-                    for j, b in enumerate(counter_grid[i]):
-                        if b == -1 and (i,j) not in detonate and second % 2 == 0:
-                            counter_grid[i][j] = 2
-                            grid[i][j] = "O"
-                        elif b > 0:
-                            b -= 1
-                            counter_grid[i][j] = b
-                            grid[i][j] = "O"
-                        if b == 0:
-                            counter_grid[i][j] = -1
-                            grid[i][j] = "."
-                            if i > 0:
-                                counter_grid[i-1][j] = -1
-                                grid[i-1][j] = "."
-                            if j > 0:
-                                counter_grid[i][j-1] = -1
-                                grid[i][j-1] = "."
-                            if i + 1 < rows and counter_grid[i+1][j] != 1:
-                                grid[i+1][j] = "."
-                                counter_grid[i+1][j] = -1
-                                detonate.append((i+1, j))
-                            if j + 1 < cols and counter_grid[i][j+1] != 1:
-                                grid[i][j+1] = "."
-                                counter_grid[i][j+1] = -1
-                                detonate.append((i, j+1))
-            # printMatrix(matrix=counter_grid)
-            # printMatrix(matrix=grid)
-
-        # convert grid to list of strings
-        grid = [''.join(row) for row in grid]
-    return grid """
+# When bomb exploded, store 5 points on grid at set.
+def afterBomb(r,c, grid, result):
+    result.add((r,c))
+    if r-1>=0:
+        result.add((r-1,c))
+    if c-1>=0:
+        result.add((r,c-1))
+    if r+1<len(grid):
+        result.add((r+1,c))
+    if c+1<len(grid[0]):
+        result.add((r,c+1))
 
 def bomberMan(n, grid):
-    case = 0
-    if n < 2:
+    # Write your code here
+    numrow = len(grid)
+    numcol = len(grid[0])
+    def explod(arr):
+        afterbombSet = set()
+        for r in range(numrow):
+            for c in range(numcol):
+                if arr[r][c] == "O":
+                    afterBomb(r,c,arr,afterbombSet)
+        result = []
+        for i in range(numrow):
+            tempStr = ''
+            for j in range(numcol):
+                if (i,j) in afterbombSet:
+                    tempStr += '.'
+                else:
+                    tempStr += 'O'
+            result.append(tempStr)
+        return result
+    if n==1:
         return grid
-    if n == 3:
-        case = 1
-    elif n % 2 == 0:
-        case = 'X'
-    elif (((n-1)/2)%2 == 0):
-        case = 2
+    if n%2==0:
+        allBombs = ['O'*numcol for _ in range(numrow)]
+        return allBombs
     else:
-        case = 3
-
-    cols = len(grid[0])
-    rows = len(grid)
-
-    grid = [["." if grid[i][j] == "." else "O" for j in range(cols)] for i in range(rows)]
-    counter_grid = [[-1 if grid[i][j] == "." else 2 for j in range(cols)] for i in range(rows)]
-
-    def set_off(i, j, grid):
-        x = [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]
-        grid[i][j] = '.'
-        for a,b in x:
-            try:
-                if grid[a][b] != 'O':
-                    grid[a][b] = '.'
-            except:
-                pass
-        return grid
-
-
-    def detonate(state, grid):
-        if state == 'X':
-            # fill the grid with bombs
-            grid = [['O' for i in range(cols)] for j in range(rows)]
-            grid = [''.join(row) for row in grid]
-            return grid
-        for second in range(state+1):
-            detonate = []
-            for i in range(len(counter_grid)):
-                for j, b in enumerate(counter_grid[i]):
-                    if b == -1 and (i,j) not in detonate and second % 2 == 0:
-                        counter_grid[i][j] = 2
-                        grid[i][j] = "O"
-                    elif b > 0:
-                        b -= 1
-                        counter_grid[i][j] = b
-                        grid[i][j] = "O"
-                    if b == 0:
-                        counter_grid[i][j] = -1
-                        grid[i][j] = "."
-                        if i > 0:
-                            counter_grid[i-1][j] = -1
-                            grid[i-1][j] = "."
-                        if j > 0:
-                            counter_grid[i][j-1] = -1
-                            grid[i][j-1] = "."
-                        if i + 1 < rows and counter_grid[i+1][j] != 1:
-                            grid[i+1][j] = "."
-                            counter_grid[i+1][j] = -1
-                            detonate.append((i+1, j))
-                        if j + 1 < cols and counter_grid[i][j+1] != 1:
-                            grid[i][j+1] = "."
-                            counter_grid[i][j+1] = -1
-                            detonate.append((i, j+1))
-            # printMatrix(matrix=counter_grid)
-            # printMatrix(matrix=grid)
-
-        # convert grid to list of strings
-        grid = [''.join(row) for row in grid]
-        return grid
-
-    return detonate(case, grid)
+        if (n-1)%4==0:
+            temp = explod(grid)
+            return explod(temp)
+        else:
+            return explod(grid)
 
 if __name__ == '__main__':
     first_multiple_input = input().rstrip().split()
